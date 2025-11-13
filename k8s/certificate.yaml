@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: sre-tls
+  namespace: sre
+spec:
+  secretName: sre-tls
+  duration: 8760h
+  renewBefore: 240h
+  commonName: sre.135.116.247.22.nip.io
+  dnsNames:
+    - sre.135.116.247.22.nip.io
+  issuerRef:
+    name: selfsigned-issuer
+    kind: Issuer

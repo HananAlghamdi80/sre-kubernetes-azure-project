@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sre-services-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus   # ← حرف صغير مهم جدًا
+spec:
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - api-service
+          - auth-service
+          - images-service
+  namespaceSelector:
+    matchNames:
+      - sre
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

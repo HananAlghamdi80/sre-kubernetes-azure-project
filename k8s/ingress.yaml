@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sre-ingress
+  namespace: sre
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  ingressClassName: nginx
+
+  tls:
+  - hosts:
+    - sre.135.116.247.22.nip.io
+    secretName: sre-tls
+
+  rules:
+  - host: sre.135.116.247.22.nip.io
+    http:
+      paths:
+
+      # ✅ الصفحة الرئيسية تروح إلى API
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 3000
+
+      - path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: api-service
+            port:
+              number: 3000
+
+      - path: /auth(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: auth-service
+            port:
+              number: 8080
+
+      - path: /images(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: images-service
+            port:
+              number: 9000

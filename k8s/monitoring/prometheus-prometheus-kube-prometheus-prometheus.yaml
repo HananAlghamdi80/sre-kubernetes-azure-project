@@ -1,0 +1,66 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  annotations:
+    meta.helm.sh/release-name: prometheus
+    meta.helm.sh/release-namespace: monitoring
+  labels:
+    app: kube-prometheus-stack-prometheus
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    app.kubernetes.io/version: 79.4.1
+    chart: kube-prometheus-stack-79.4.1
+    heritage: Helm
+    release: prometheus
+  name: prometheus-kube-prometheus-prometheus
+  namespace: monitoring
+spec:
+  replicas: 1
+  retention: 10d
+  scrapeInterval: 30s
+  enableAdminAPI: false
+  enableOTLPReceiver: false
+  evaluationInterval: 30s
+  externalUrl: http://prometheus-kube-prometheus-prometheus.monitoring:9090
+  image: quay.io/prometheus/prometheus:v3.7.3
+  imagePullPolicy: IfNotPresent
+  logLevel: info
+  routePrefix: /
+  securityContext:
+    fsGroup: 2000
+    runAsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+    seccompProfile:
+      type: RuntimeDefault
+  serviceAccountName: prometheus-kube-prometheus-prometheus
+
+  # ✅ تعديل متوافق مع النسخة عندك
+  serviceMonitorNamespaceSelector: {}
+  serviceMonitorSelector:
+    matchLabels:
+      release: prometheus
+
+  podMonitorNamespaceSelector: {}
+  podMonitorSelector:
+    matchLabels:
+      release: prometheus
+
+  ruleNamespaceSelector: {}
+  ruleSelector:
+    matchLabels:
+      release: prometheus
+
+  alerting:
+    alertmanagers:
+    - apiVersion: v2
+      name: prometheus-kube-prometheus-alertmanager
+      namespace: monitoring
+      pathPrefix: /
+      port: http-web
+  shards: 1
+  tsdb:
+    outOfOrderTimeWindow: 0s
+  version: v3.7.3
+  walCompression: true

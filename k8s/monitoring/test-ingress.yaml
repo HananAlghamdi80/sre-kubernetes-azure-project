@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  namespace: sre
+spec:
+  ingressClassName: nginx   # ✅ هذا هو الجديد
+  rules:
+  - host: sre.135.116.246.117.nip.io   # ← نفس الـ IP اللي عندك في svc
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: api-service          # ← غيّريها لو خدمتك اسمها مختلف
+            port:
+              number: 80
