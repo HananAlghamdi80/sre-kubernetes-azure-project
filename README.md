@@ -269,7 +269,10 @@ Alert triggered and sent to Discord when API pod CPU spikes.
 ![Grafana Alert](https://raw.githubusercontent.com/HananAlghamdi80/sre-kubernetes-azure-project/main/grav.png)
 
 
-🎯 Summary
+##  Summary This project covers:
+
+
+Summary
 This project covers:
 
 
